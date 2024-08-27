@@ -1,3 +1,0 @@
-# EnlacesSoccer API
-
-cualquier cosa

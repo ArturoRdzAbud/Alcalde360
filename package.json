@@ -1,5 +1,5 @@
 {
-  "name": "enlacessoccer",
+  "name": "alcalde360",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -19,12 +19,12 @@
   "scripts": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/javier-aml/EnlaccesSoccer_API.git"
+    "url": "git+https://github.com/ArturoRdzAbud/Alcalde360_API.git"
   },
-  "author": "JAML",
+  "author": "GrupoArtra",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/javier-aml/EnlaccesSoccer_API/issues"
+    "url": "https://github.com/ArturoRdzAbud/Alcalde360_API/issues"
   },
-  "homepage": "https://github.com/javier-aml/EnlaccesSoccer_API#readme"
+  "homepage": "https://github.com/ArturoRdzAbud/Alcalde360_API#readme"
 }
