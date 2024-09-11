@@ -23,6 +23,7 @@ const ConsultarArbitros = require('../controllers/ConsultarArbitros');
 const consultarUsuarios = require('../controllers/ConsultarUsuarios');
 const guardarUsuario = require('../controllers/GuardarUsuario');
 const consultarUsuariosAdministradores = require('../controllers/ConsultarUsuariosAdministradores');
+const consultarIncidencia = require('../controllers/ConsultarIncidencia');
 
 const consultarArbitroFoto = require('../controllers/ConsultarArbitroFoto');
 
@@ -52,7 +53,7 @@ router.post('/GuardarUsuario', guardarUsuario.post);
 
 router.post('/login', login.post);
 router.get('/validsession', passport.authenticate('jwt', { session: false }), validsession.get);
-
+router.get('/ConsultarIncidencia', consultarIncidencia.get);
 
 // Ruta para manejar la carga de fotografia del Árbitro
 router.post('/GuardarArbitroFotografia', upload.single('piFotografia'), async (req, res) => {
