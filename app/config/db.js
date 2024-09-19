@@ -1,7 +1,7 @@
 const dbConfig = {
   user: 'sadmin',
   password: 'Nimdas2023@',
-  database: 'Enlaces',
+  database: 'Alcalde360_Des',
   server: 'enlaces.database.windows.net',
   pool: {
     max: 30,
