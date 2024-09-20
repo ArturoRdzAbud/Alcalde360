@@ -6,9 +6,9 @@ exports.ConsultarIncidencia = async (params) => {
     const pool = await mssql.connect(sqlConfig);
     console.log(params, pool)
     const result = await pool.request()
-      .input('pnIdLiga', params.pnIdLiga)
+      .input('pnIdAlcaldia', params.pnIdAlcaldia)
       .input('pnActivo', params.pnActivo)
-      .execute('ConsultarArbitros');
+      .execute('ConsultarIncidencia');
     return result.recordsets[0];
   } catch (err) {
     return err;
