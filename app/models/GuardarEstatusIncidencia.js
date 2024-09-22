@@ -8,11 +8,11 @@ exports.GuardarEstatusIncidencia = async (body) => {
     const pool = await mssql.connect(sqlConfig);
     const result = await pool.request()
 
-      .input('pnIdAlcaldia', body.pmIdAlcaldia)
+      .input('pnIdAlcaldia', body.pnIdAlcaldia)
       .input('pnIdIncidencia', body.pnIdIncidencia)
       .input('pnidEstatusIncidencia', body.pnIdEstatus)
-      .input('pnFechaEstimada', body.pmFechaEstimada)
-      .input('pnComentarios', body.pmComentarios)
+      .input('pdFechaEstimada', body.pdFechaEstimada)
+      .input('psComentarios', body.psComentarios)
       .input('pnIdUsuario', body.pnIdUsuario)
 
       .execute('ActualizarEstatusIncidencia'); 

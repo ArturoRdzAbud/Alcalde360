@@ -9,12 +9,13 @@ exports.GuardarAreayPrioridadIncidencia = async (body) => {
     const pool = await mssql.connect(sqlConfig);
     const result = await pool.request()
 
-      .input('pnIdAlcaldia', body.pmIdAlcaldia)
+      .input('pnIdAlcaldia', body.pnIdAlcaldia)
       .input('pnIdIncidencia', body.pnIdIncidencia)
       .input('pnIdArea', body.pnIdArea)
-      .input('pnIdPrioridad', body.pmIdPrioridad)
+      .input('pnIdPrioridad', body.pnIdPrioridad)
       .input('pnIdUsuario', body.pnIdUsuario)
 
+     
       .execute('ActualizarAreayPrioridadIncidencia'); 
 
       console.log('ACTUALIZADO CORRECTAMENTE')
