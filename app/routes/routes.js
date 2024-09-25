@@ -24,8 +24,12 @@ const consultarUsuarios = require('../controllers/ConsultarUsuarios');
 const guardarUsuario = require('../controllers/GuardarUsuario');
 const consultarUsuariosAdministradores = require('../controllers/ConsultarUsuariosAdministradores');
 const consultarIncidencia = require('../controllers/ConsultarIncidencia');
+const guardarAreayPrioridadIncidencia = require('../controllers/GuardarAreayPrioridadIncidencia');
+const consultarColonias = require('../controllers/ConsultarColonias');
+const guardarIncidencia = require('../controllers/GuardarIncidencia');
 
 const consultarArbitroFoto = require('../controllers/ConsultarArbitroFoto');
+const consultarIncidenciaEvidencia = require('../controllers/ConsultarIncidenciaEvidencia');
 
 const login = require('../auth/controllers/login');
 const validsession = require('../auth/controllers/validsession');
@@ -43,47 +47,61 @@ router.get('/ConsultarDiasSemana', consultarDiasSemana.get);
 router.get('/ConsultarArbitros', ConsultarArbitros.get);
 router.get('/ConsultarUsuarios', consultarUsuarios.get);
 router.get('/ConsultarUsuariosAdministradores', consultarUsuariosAdministradores.get);
+router.get('/ConsultarColonias', consultarColonias.get);
 
 router.get('/ConsultarArbitroFoto', consultarArbitroFoto.get);
+router.get('/ConsultarIncidenciaEvidencia', consultarIncidenciaEvidencia.get);
 
 router.get('/', defaultRoute.get);
 router.post('/GuardarGrid', guardarGrid.post);
 router.post('/GuardarArbitro', guardarArbitro.post);
 router.post('/GuardarUsuario', guardarUsuario.post);
+router.post('/GuardarAreayPrioridadIncidencia', guardarAreayPrioridadIncidencia.post);
+router.post('/GuardarIncidencia', guardarIncidencia.post);
 
 router.post('/login', login.post);
 router.get('/validsession', passport.authenticate('jwt', { session: false }), validsession.get);
 router.get('/ConsultarIncidencia', consultarIncidencia.get);
 
 // Ruta para manejar la carga de fotografia del Árbitro
-router.post('/GuardarArbitroFotografia', upload.single('piFotografia'), async (req, res) => {
+router.post('/GuardarIncidenciaEvidencia', upload.single('piEvidencia'), async (req, res) => {
     try {
         //console.log(req.body)
         const pool = await mssql.connect(sqlConfig);
         const request = pool.request()
-        console.log(req.body.pnIdLiga)
-        console.log(req.body.pnIdArbitro)
+        console.log(req.body.pnIdAlcaldia)
+        console.log(req.body.pnIdIncidencia)
+        console.log(req.body.pnIdUsuario)
         console.log('mensaje del server')
 
         // Guardar la imagen en la base de datos
         const image = req.file.buffer;
-        const idLiga = req.body.pnIdLiga;
-        const idArbitro = req.body.pnIdArbitro;
+        const idAlcaldia = req.body.pnIdAlcaldia;
+        const idIncidencia = req.body.pnIdIncidencia;
+        const idUsuario = req.body.pnIdUsuario;
 
 
         request.input('pnImage', mssql.VarBinary, image); // Declara el parámetro @image y asigna el valor 'image'
-        request.input('pnIdLiga', mssql.Int, idLiga)
-        request.input('pnIdArbitro', mssql.Int, idArbitro)
-        // console.log('etapa intermedia')
-        await request.query('UPDATE dbo.Arbitro SET FechaUltimaMod=Getdate(), Fotografia = @pnImage where IdLiga = @pnIdLiga AND IdArbitro = @pnIdArbitro');
+        request.input('pnIdAlcaldia', mssql.Int, idAlcaldia)
+        request.input('pnIdIncidencia', mssql.Int, idIncidencia)
+        request.input('pnIdUsuario', mssql.Int, idUsuario)
 
-        res.status(200).send('Imagen subida correctamente');
-        // return request.recordsets[0];
-
-
+        const response = await request.query('DECLARE @pnIdEvidencia AS INT IF (SELECT COUNT(1) FROM dbo.IncidenciaEvidencia WHERE IdAlcaldia = @pnIdAlcaldia AND IdIncidencia = @pnIdIncidencia) < 3 BEGIN SET @pnIdEvidencia = dbo.ObtieneSiguienteIdEvidencia(@pnIdAlcaldia, @pnIdIncidencia) INSERT INTO [dbo].[IncidenciaEvidencia]([IdAlcaldia],[IdIncidencia],[IdEvidencia],[Evidencia],[FechaUltimaMod],[NombrePcMod],[ClaUsuarioMod]) VALUES(@pnIdAlcaldia, @pnIdIncidencia, @pnIdEvidencia, @pnImage, Getdate(), host_name(), @pnIdUsuario) SELECT Evidencias = 0 END ELSE BEGIN SELECT Evidencias = 3 END');
+        let evidencias = response.recordset[0].Evidencias;
+        console.log(evidencias)
+        if (evidencias === 3) 
+        {
+            res.status(200).send('No se pueden agregar más de 3 evidencias por incidencia');
+        }
+        else
+        {
+            res.status(200).send('Guardo exitosamente la evidencia');
+        }
+        
+        
     } catch (error) {
         //console.error('Error al subir la imagen:', error);
-        res.status(500).send('Error al subir la imagen');
+        res.status(500).send('Error al subir la evidencia');
         console.log(error.message)
         //return err.message;
     }
