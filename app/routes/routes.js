@@ -19,6 +19,7 @@ const consultarDiasSemana = require('../controllers/ConsultarDiasSemana');
 const defaultRoute = require('../controllers/DefaultController');
 const guardarGrid = require('../controllers/GuardarGrid');
 const guardarArbitro = require('../controllers/GuardarArbitro');
+const guardarEncuesta = require('../controllers/GuardarEncuesta');
 const ConsultarArbitros = require('../controllers/ConsultarArbitros');
 const consultarUsuarios = require('../controllers/ConsultarUsuarios');
 const guardarUsuario = require('../controllers/GuardarUsuario');
@@ -52,6 +53,7 @@ router.get('/ConsultarArbitroFoto', consultarArbitroFoto.get);
 router.get('/', defaultRoute.get);
 router.post('/GuardarGrid', guardarGrid.post);
 router.post('/GuardarArbitro', guardarArbitro.post);
+router.post('/GuardarEncuesta', guardarEncuesta.post);
 router.post('/GuardarUsuario', guardarUsuario.post);
 
 router.post('/login', login.post);
