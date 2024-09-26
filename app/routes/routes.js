@@ -19,6 +19,7 @@ const consultarDiasSemana = require('../controllers/ConsultarDiasSemana');
 const defaultRoute = require('../controllers/DefaultController');
 const guardarGrid = require('../controllers/GuardarGrid');
 const guardarArbitro = require('../controllers/GuardarArbitro');
+const guardarEncuesta = require('../controllers/GuardarEncuesta');
 const ConsultarArbitros = require('../controllers/ConsultarArbitros');
 const consultarUsuarios = require('../controllers/ConsultarUsuarios');
 const guardarUsuario = require('../controllers/GuardarUsuario');
@@ -27,6 +28,9 @@ const consultarIncidencia = require('../controllers/ConsultarIncidencia');
 const guardarAreayPrioridadIncidencia = require('../controllers/GuardarAreayPrioridadIncidencia');
 const consultarColonias = require('../controllers/ConsultarColonias');
 const guardarIncidencia = require('../controllers/GuardarIncidencia');
+
+const GuardarAreayPrioridadIncidencia = require('../controllers/GuardarAreayPrioridadIncidencia');
+const GuardarEstatusIncidencia = require('../controllers/GuardarEstatusIncidencia');
 
 const consultarArbitroFoto = require('../controllers/ConsultarArbitroFoto');
 const consultarIncidenciaEvidencia = require('../controllers/ConsultarIncidenciaEvidencia');
@@ -55,6 +59,7 @@ router.get('/ConsultarIncidenciaEvidencia', consultarIncidenciaEvidencia.get);
 router.get('/', defaultRoute.get);
 router.post('/GuardarGrid', guardarGrid.post);
 router.post('/GuardarArbitro', guardarArbitro.post);
+router.post('/GuardarEncuesta', guardarEncuesta.post);
 router.post('/GuardarUsuario', guardarUsuario.post);
 router.post('/GuardarAreayPrioridadIncidencia', guardarAreayPrioridadIncidencia.post);
 router.post('/GuardarIncidencia', guardarIncidencia.post);
@@ -62,6 +67,9 @@ router.post('/GuardarIncidencia', guardarIncidencia.post);
 router.post('/login', login.post);
 router.get('/validsession', passport.authenticate('jwt', { session: false }), validsession.get);
 router.get('/ConsultarIncidencia', consultarIncidencia.get);
+
+router.post('/GuardarAreayPrioridadIncidencia', GuardarAreayPrioridadIncidencia.post);
+router.post('/GuardarEstatusIncidencia', GuardarEstatusIncidencia.post);
 
 // Ruta para manejar la carga de fotografia del Árbitro
 router.post('/GuardarIncidenciaEvidencia', upload.single('piEvidencia'), async (req, res) => {
