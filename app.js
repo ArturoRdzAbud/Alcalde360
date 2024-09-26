@@ -19,6 +19,9 @@ app.use('/', routes);
 //Configuración de Twilio
 app.use(express.urlencoded({ extended: true }));
 
+// console.log("TWILIO_ACCOUNT_SID: ", process.env.TWILIO_ACCOUNT_SID);
+// console.log("TWILIO_AUTH_TOKEN: ", process.env.TWILIO_AUTH_TOKEN);
+
 app.post("/webhook", function (req, res) {
     console.log("req ->", req.body);
     twilio.sendTextMessage(req.body.WaId, req.body.Body);
