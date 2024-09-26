@@ -1,6 +1,12 @@
+// Cargar dotenv para acceder a las variables de entorno
+require('dotenv').config();
+
 // Configuración de Twilio
-const accountSid = "AC8cc46acd638d67ccd4a18342c7b2f0d9";
-const authToken = "383d294d1e841644b21a8d3cb62980e5";
+// Obtiene las credenciales desde el archivo .env
+const accountSid = process.env.TWILIO_ACCOUNT_SID; // Tu SID de cuenta de Twilio
+const authToken = process.env.TWILIO_AUTH_TOKEN;   // Tu token de autenticación
+
+
 const client = require("twilio")(accountSid, authToken);
 
 function sendTextMessage(sender, message) {
