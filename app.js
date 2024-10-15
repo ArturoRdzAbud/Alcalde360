@@ -339,7 +339,7 @@ async function ConvierteImagenABinario(url) {
   try {
     const auth = {
       username: 'AC8cc46acd638d67ccd4a18342c7b2f0d9', // Reemplaza con tu Account SID de Twilio
-      password: '8b58ddd1921105f6c5f01e2193f0f389'   // Reemplaza con tu Auth Token de Twilio
+      password: '66696e3e8ac2c3221f2520f24f6954c0'   // Reemplaza con tu Auth Token de Twilio
     };
 
     const response = await axios({
