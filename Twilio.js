@@ -22,11 +22,10 @@ function sendTextMessage(sender, message) {
     });
   }
   
-  
+ /* 
   module.exports = {
     sendTextMessage,
   };
-  
-/*  
+  */
+
 sendTextMessage('5218121003020','Hola Mundo!')
-*/
