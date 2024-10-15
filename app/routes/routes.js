@@ -5,9 +5,15 @@ const mssql = require('mssql');
 const sqlConfig = require('../config/db');
 const multer = require('multer');
 
+/*
 // Configuración de multer para manejar el almacenamiento de archivos
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
+*/
+// Configura multer para manejar el archivo binario de las evidencias
+const upload = multer({
+    limits: { fileSize: 5 * 1024 * 1024 }, // Límite de tamaño de archivo: 5 MB, ajusta si es necesario
+  });
 
 const consultarEstados = require('../controllers/ConsultarEstados');
 const consultarGrid = require('../controllers/ConsultarGrid');
@@ -77,22 +83,34 @@ router.post('/GuardarIncidenciaEvidencia', upload.single('piEvidencia'), async (
         //console.log(req.body)
         const pool = await mssql.connect(sqlConfig);
         const request = pool.request()
-        console.log(req.body.pnIdAlcaldia)
-        console.log(req.body.pnIdIncidencia)
-        console.log(req.body.pnIdUsuario)
-        console.log('mensaje del server')
+        
+
+        // Verifica si el archivo fue cargado correctamente
+        if (!req.file) {
+            return res.status(400).send('No se recibió ningún archivo.');
+        }
 
         // Guardar la imagen en la base de datos
+        //console.log('manda información de req:', req)
         const image = req.file.buffer;
+        
+        if (!image) {
+            return res.status(400).send('No se recibió ninguna imagen.');
+        }
+
+        //const image = req.body.piEvidencia;
         const idAlcaldia = req.body.pnIdAlcaldia;
         const idIncidencia = req.body.pnIdIncidencia;
         const idUsuario = req.body.pnIdUsuario;
 
+        console.log('asignación correcta de parametros')
 
         request.input('pnImage', mssql.VarBinary, image); // Declara el parámetro @image y asigna el valor 'image'
         request.input('pnIdAlcaldia', mssql.Int, idAlcaldia)
         request.input('pnIdIncidencia', mssql.Int, idIncidencia)
         request.input('pnIdUsuario', mssql.Int, idUsuario)
+
+        console.log(request.parameters)
 
         const response = await request.query('DECLARE @pnIdEvidencia AS INT IF (SELECT COUNT(1) FROM dbo.IncidenciaEvidencia WHERE IdAlcaldia = @pnIdAlcaldia AND IdIncidencia = @pnIdIncidencia) < 3 BEGIN SET @pnIdEvidencia = dbo.ObtieneSiguienteIdEvidencia(@pnIdAlcaldia, @pnIdIncidencia) INSERT INTO [dbo].[IncidenciaEvidencia]([IdAlcaldia],[IdIncidencia],[IdEvidencia],[Evidencia],[FechaUltimaMod],[NombrePcMod],[ClaUsuarioMod]) VALUES(@pnIdAlcaldia, @pnIdIncidencia, @pnIdEvidencia, @pnImage, Getdate(), host_name(), @pnIdUsuario) SELECT Evidencias = 0 END ELSE BEGIN SELECT Evidencias = 3 END');
         let evidencias = response.recordset[0].Evidencias;
