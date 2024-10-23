@@ -13,7 +13,7 @@ const upload = multer({ storage: storage });
 // Configura multer para manejar el archivo binario de las evidencias
 const upload = multer({
     limits: { fileSize: 5 * 1024 * 1024 }, // Límite de tamaño de archivo: 5 MB, ajusta si es necesario
-  });
+});
 
 const consultarEstados = require('../controllers/ConsultarEstados');
 const consultarGrid = require('../controllers/ConsultarGrid');
@@ -41,6 +41,8 @@ const GuardarEstatusIncidencia = require('../controllers/GuardarEstatusIncidenci
 const consultarArbitroFoto = require('../controllers/ConsultarArbitroFoto');
 const consultarIncidenciaEvidencia = require('../controllers/ConsultarIncidenciaEvidencia');
 
+const consultarSolicitudAgenda = require('../controllers/ConsultarSolicitudAgenda');
+
 const login = require('../auth/controllers/login');
 const validsession = require('../auth/controllers/validsession');
 // const { GuardarJugadorxEquipo } = require('../models/GuardarJugadorxEquipo');
@@ -61,6 +63,7 @@ router.get('/ConsultarColonias', consultarColonias.get);
 
 router.get('/ConsultarArbitroFoto', consultarArbitroFoto.get);
 router.get('/ConsultarIncidenciaEvidencia', consultarIncidenciaEvidencia.get);
+router.get('/ConsultarSolicitudAgenda', consultarSolicitudAgenda.get);
 
 router.get('/', defaultRoute.get);
 router.post('/GuardarGrid', guardarGrid.post);
@@ -83,7 +86,7 @@ router.post('/GuardarIncidenciaEvidencia', upload.single('piEvidencia'), async (
         //console.log(req.body)
         const pool = await mssql.connect(sqlConfig);
         const request = pool.request()
-        
+
 
         // Verifica si el archivo fue cargado correctamente
         if (!req.file) {
@@ -93,7 +96,7 @@ router.post('/GuardarIncidenciaEvidencia', upload.single('piEvidencia'), async (
         // Guardar la imagen en la base de datos
         //console.log('manda información de req:', req)
         const image = req.file.buffer;
-        
+
         if (!image) {
             return res.status(400).send('No se recibió ninguna imagen.');
         }
@@ -105,26 +108,25 @@ router.post('/GuardarIncidenciaEvidencia', upload.single('piEvidencia'), async (
 
         console.log('asignación correcta de parametros')
 
-        request.input('pnImage', mssql.VarBinary, image); // Declara el parámetro @image y asigna el valor 'image'
+        request.input('pnImage', mssql.VarBinary(mssql.MAX), image); // Declara el parámetro @image y asigna el valor 'image'
         request.input('pnIdAlcaldia', mssql.Int, idAlcaldia)
         request.input('pnIdIncidencia', mssql.Int, idIncidencia)
         request.input('pnIdUsuario', mssql.Int, idUsuario)
 
         console.log(request.parameters)
 
-        const response = await request.query('DECLARE @pnIdEvidencia AS INT IF (SELECT COUNT(1) FROM dbo.IncidenciaEvidencia WHERE IdAlcaldia = @pnIdAlcaldia AND IdIncidencia = @pnIdIncidencia) < 3 BEGIN SET @pnIdEvidencia = dbo.ObtieneSiguienteIdEvidencia(@pnIdAlcaldia, @pnIdIncidencia) INSERT INTO [dbo].[IncidenciaEvidencia]([IdAlcaldia],[IdIncidencia],[IdEvidencia],[Evidencia],[FechaUltimaMod],[NombrePcMod],[ClaUsuarioMod]) VALUES(@pnIdAlcaldia, @pnIdIncidencia, @pnIdEvidencia, @pnImage, Getdate(), host_name(), @pnIdUsuario) SELECT Evidencias = 0 END ELSE BEGIN SELECT Evidencias = 3 END');
+        //const response = await request.query('DECLARE @pnIdEvidencia AS INT IF (SELECT COUNT(1) FROM dbo.IncidenciaEvidencia WHERE IdAlcaldia = @pnIdAlcaldia AND IdIncidencia = @pnIdIncidencia) < 3 BEGIN SET @pnIdEvidencia = dbo.ObtieneSiguienteIdEvidencia(@pnIdAlcaldia, @pnIdIncidencia) INSERT INTO [dbo].[IncidenciaEvidencia]([IdAlcaldia],[IdIncidencia],[IdEvidencia],[Evidencia],[FechaUltimaMod],[NombrePcMod],[ClaUsuarioMod]) VALUES(@pnIdAlcaldia, @pnIdIncidencia, @pnIdEvidencia, @pnImage, Getdate(), host_name(), @pnIdUsuario) SELECT Evidencias = 0 END ELSE BEGIN SELECT Evidencias = 3 END');
+        const response = await request.execute('GuardarImagen')
         let evidencias = response.recordset[0].Evidencias;
         console.log(evidencias)
-        if (evidencias === 3) 
-        {
+        if (evidencias === 3) {
             res.status(200).send('No se pueden agregar más de 3 evidencias por incidencia');
         }
-        else
-        {
+        else {
             res.status(200).send('Guardo exitosamente la evidencia');
         }
-        
-        
+
+
     } catch (error) {
         //console.error('Error al subir la imagen:', error);
         res.status(500).send('Error al subir la evidencia');
