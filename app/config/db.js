@@ -11,7 +11,8 @@ const dbConfig = {
   //npm install dotenv
   //    permite cargar variables de entorno desde un archivo .env a tu aplicación para credenciales de Twilio
   //    nota quiza valga la pena hacer lo mismo con las credenciales del sql que esta en db.js para mas seguridad
-
+  //npm install cors
+  //    para enviar arreglos a la api que tengan archivos binarios
 
   pool: {
     max: 30,
