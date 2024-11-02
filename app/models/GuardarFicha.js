@@ -2,12 +2,13 @@ const mssql = require("mssql");
 const sqlConfig = require("../config/db");
 exports.GuardarFicha = async (body) => {
   try {
-    console.log(body);
+    // console.log(body);
     const pool = await mssql.connect(sqlConfig);
     const result = await pool
       .request()
       .input("pnIdAlcaldia", body.pnIdAlcaldia)
       .input("pnFicha", body.pnFicha)
+      .input("pnIdSolicitudAgenda", body.pnIdSolicitudAgenda)
       .input("psTitulo", body.psTitulo)
       .input("psFecha", body.psFecha)
       .input("psHora", body.psHora)
