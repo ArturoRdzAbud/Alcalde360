@@ -41,10 +41,16 @@ const GuardarEstatusIncidencia = require('../controllers/GuardarEstatusIncidenci
 const consultarArbitroFoto = require('../controllers/ConsultarArbitroFoto');
 const consultarIncidenciaEvidencia = require('../controllers/ConsultarIncidenciaEvidencia');
 
+const ConsultarEventos = require('../controllers/ConsultarEventos');
+const ConsultarEventoParticipantes = require('../controllers/ConsultarEventoParticipantes');
+const ConsultarEventoProgramas = require('../controllers/ConsultarEventoProgramas');
+
+const GuardarFichaTecnicaEvento = require('../controllers/GuardarFichaTecnicaEvento');
+const GuardaFichaTecnicaEventoGrids = require('../controllers/GuardaFichaTecnicaEventoGrids');
+
 const login = require('../auth/controllers/login');
 const validsession = require('../auth/controllers/validsession');
 // const { GuardarJugadorxEquipo } = require('../models/GuardarJugadorxEquipo');
-
 
 
 router.get('/ConsultarEstados', consultarEstados.get);
@@ -73,6 +79,13 @@ router.post('/GuardarIncidencia', guardarIncidencia.post);
 router.post('/login', login.post);
 router.get('/validsession', passport.authenticate('jwt', { session: false }), validsession.get);
 router.get('/ConsultarIncidencia', consultarIncidencia.get);
+
+router.get('/ConsultarEventos', ConsultarEventos.get)
+router.get('/ConsultarEventoParticipantes', ConsultarEventoParticipantes.get)
+router.get('/ConsultarEventoProgramas', ConsultarEventoProgramas.get)
+
+router.post('/GuardarFichaTecnicaEvento', GuardarFichaTecnicaEvento.post)
+router.post('/GuardaFichaTecnicaEventoGrids', GuardaFichaTecnicaEventoGrids.post)
 
 router.post('/GuardarAreayPrioridadIncidencia', GuardarAreayPrioridadIncidencia.post);
 router.post('/GuardarEstatusIncidencia', GuardarEstatusIncidencia.post);
