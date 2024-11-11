@@ -6,10 +6,9 @@ exports.ConsultarEventoProgramas = async(params) => {
         const pool = await mssql.connect(sqlConfig);
         const result = await pool.request()
         .input('pnIdAlcaldia', params.pnIdAlcaldia)
-        .input('pnIdFichaTecnicaEvento', params.pnIdFichaTecnicaEvento)
+        .input('pnIdSolicitudAgenda', params.pnIdSolicitudAgenda)
         .execute('ConsultarEventoProgramas');
-
-        return result.recordset[0];
+        return result.recordsets[0];
     } catch (err) {
         return err;
     }

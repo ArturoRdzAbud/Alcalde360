@@ -6,6 +6,6 @@ exports.get = async(req, res) => {
     const data = await model.ConsultarEventoParticipantes(params);
     res.setHeader('Acces-Control-Allow-Origin', '*');
     res.setHeader('Acces-Control-Allow-Methods', 'GET');
-    res.setHeader('content-type','application/json; charset-utf-8');
+    res.setHeader('content-type','application/json; charset=utf-8');
     res.json(data);
 }

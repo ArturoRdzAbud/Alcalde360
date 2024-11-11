@@ -3,15 +3,14 @@ const sqlConfig = require('../config/db');
 
 exports.ConsultarEventoParticipantes = async (params) => {
   try {
+    console.log(params.pnIdAlcaldia, params.pnIdSolicitudAgenda, params.pnIdTipoParticipanteEvento);
     const pool = await mssql.connect(sqlConfig);
-    //console.log(params, pool)
     const result = await pool.request()
       .input('pnIdAlcaldia', params.pnIdAlcaldia)
-      .input('pnIdFichaTecnicaEvento', params.pnIdFichaTecnicaEvento)
+      .input('pnIdSolicitudAgenda', params.pnIdSolicitudAgenda)
       .input('pnIdTipoParticipanteEvento', params.pnIdTipoParticipanteEvento)
-      .execute('ConsultarEventoParticipantes');
-    
-    return result.recordset[0];
+      .execute('ConsultarEventoParticipantes');    
+    return result.recordsets[0];
 
   } catch (err) {
     return err;

@@ -1,4 +1,4 @@
-const model = require('../models/GuardaFichaTecnicaEventoGrids.js');
+const model = require('../models/GuardaFichaTecnicaEventoGrids');
 
 exports.post = async (req, res) => {
     const body = req.body.data;
