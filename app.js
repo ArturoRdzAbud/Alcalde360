@@ -14,6 +14,12 @@ const twilio = require("./app/config/Twilio");
 const axios = require('axios');
 const FormData = require('form-data');
 
+
+// Aumentar el límite de tamaño
+app.use(express.json({ limit: '30mb' })); // Aumenta el límite de tamaño según lo necesites
+app.use(express.urlencoded({ limit: '30mb', extended: true }));
+
+
 app.use(express.json());
 app.set('port', port);
 app.use(cors());
