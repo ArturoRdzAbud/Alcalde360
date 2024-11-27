@@ -60,7 +60,7 @@ function validaIdCapturado(arreglo, idCapturado) {
 }
 
 
-// Estado para almacenar las respuestas de los usuarios
+// Estado para Almacenar las respuestas de los usuarios
 let users = {};
 
 // Listas de opciones para desplegables
