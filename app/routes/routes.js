@@ -150,6 +150,172 @@ router.post('/GuardarIncidenciaEvidencia', upload.single('piEvidencia'), async (
     }
 });
 
+/*
+const axios = require('axios');
+const cheerio = require('cheerio'); // Para analizar HTML
+
+async function getAuthorizationCode() {
+  const tenantId = "b15d8fa9-690a-4b8a-9b08-df1642c6c557";
+  const clientId = "5fad5f20-a0e2-40db-9fbb-a85c09909a44";
+  const redirectUri = "http://localhost:3000/";
+  const scope = "https://analysis.windows.net/powerbi/api/.default";
+  const loginHint = "arturorodriguezabud@grupoartra.onmicrosoft.com";
+
+  // Construcción de la URL
+  const authUrl = `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/authorize` +
+    `?client_id=${clientId}` +
+    `&response_type=code` +
+    `&redirect_uri=${encodeURIComponent(redirectUri)}` +
+    `&scope=${encodeURIComponent(scope)}` +
+    `&login_hint=${encodeURIComponent(loginHint)}`;
+
+  try {
+    console.log("Realizando llamada GET a la URL de autorización...");
+    const response = await axios.get(authUrl, {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    });
+
+    console.log("Respuesta recibida, analizando HTML...");
+
+    // Cargar el cuerpo HTML de la respuesta
+    const $ = cheerio.load(response.data);
+
+    console.log(response.data)
+
+    // Buscar el código de autorización en el HTML
+    const authCode = $('input[name="code"]').val(); // Esto depende de cómo esté estructurado el HTML
+    if (authCode) {
+      console.log("Código de autorización capturado:", authCode);
+      return authCode;
+    } else {
+      throw new Error("No se encontró el código de autorización en el HTML.");
+    }
+  } catch (err) {
+    console.error("Error al obtener el código de autorización:", err.message);
+    return null;
+  }
+}
+*/
+
+
+
+/*
+//FUNCIONA PASANDO UN CÓDIGO DE AUTORIZACIÓN CORRECTO
+
+const axios = require('axios');
+async function getAccessToken() {
+ 
+  //const authorizationCode = await getAuthorizationCode();
+  const authorizationCode = "1.AWEBqY9dsQppikubCN8WQsbFVyBfrV_ioNtAn7uoXAmQmkRiAUthAQ.AgABBAIAAADW6jl31mB3T7ugrWTT8pFeAwDs_wUA9P8lyfqnjb1t9nV2aaV9DpKJE5gLNEPAD9eYgstcBZR8EG4ZyNtVOKR82j9Fb5tm_QPiFmg_D6mCLUtN3zoCtXo2j5euW8AfH6F3ElyKoP7jljN45DQBrIRJ6USPsySfjG6HsvnSL7AvI2qN6gbST79wTjOkdYOUN5zMepQPrxhVp-xkkOCtgJYTKiWMjhvi8cagt-w30mW-mZqqvtkp-QUGuqEE4EzuKeKL9z0YcCbk0NdQyS77MLR0xHL2vgijpIPWdr6Fo32XyDk6tbX-fKmloSL3ZbkAGST70TTHVjbflhBG1nLkGpj5dGBWxix95APY0CSQLDeyYY93p6bQHCvBNYjSEncm-EZ5lLPwkzcNHYp5j04im4dxmdkVFx_DpJW2dqWK0dAWGQKgSZ6VtOr4xj7o5cdWk1_mO8YWBxreZEWxuUnO4oKIMrU-5qKXUQHnsMR2BUh9tK1sjYaa16b7DhbsZJjXUnGRadO5PWpztC2lTADWW6lzOYeqdCiyEZ6HxhR1rng7wvyYTF2bjwkkUgUyybqeTsenvAiKMub4ZXiUUYY3-KyFvmO3U-oh844drZR4ruk3MIKlJ3RnJGHRPJKv2YrQRg8tOnkOg7TjHnFgSMW67-c_-smN33WsnXy4mB7OJiOULi53pUyKx8snydSfjuSDypVsLVt8j4iYdrNrm1Bd4iQO3Gd0UzJX0vOO0v0g9SvYEvKJPUSuOhcrTmLlzFQo"
+
+  const tenantId = "b15d8fa9-690a-4b8a-9b08-df1642c6c557";
+  const clientId = "5fad5f20-a0e2-40db-9fbb-a85c09909a44";
+  const clientSecret = "";
+  const code = authorizationCode;
+  
+  const url = `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token`;
+
+  const params = new URLSearchParams();
+  params.append('grant_type', 'authorization_code');
+  params.append('client_id', clientId);
+  params.append('client_secret', clientSecret);
+  params.append('redirect_uri', 'http://localhost:3000/');
+  params.append('code', code);
+                          
+  
+  const response = await axios.post(url, params, {
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+  });
+
+  console.log(response.data.access_token)
+
+  return response.data.access_token;
+  
+}
+*/
+
+const axios = require('axios');
+
+async function getAccessToken() {
+  const tenantId = "b15d8fa9-690a-4b8a-9b08-df1642c6c557";
+  const clientId = "5fad5f20-a0e2-40db-9fbb-a85c09909a44";
+  const clientSecret = ""; //para que funcione en sus ambientes tienen que poner el secreto, 
+                           //si no lo tienen me lo piden y se los comparto por whatsapp, 
+                           //lo tuvé que quitar porque no me dejaba hacer commit de los cambios en el repositorio
+  const scope = "https://analysis.windows.net/powerbi/api/.default";
+  let refresh_token = "1.AWEBqY9dsQppikubCN8WQsbFVyBfrV_ioNtAn7uoXAmQmkRiAUthAQ.AgABAwEAAADW6jl31mB3T7ugrWTT8pFeAwDs_wUA9P8OThUk9d3XIZbW4OGsJwHqqvjnVfcvEH4nejPU6R6-3onU34aSbVTEmxec0Nn3PaKfTBxucT-bu5XLSaTZSePKAAZw22RpqBb1w6ySb5GvvcCVpFU45mNfX5OH63y2Ryt-B7Beyp5yzlIgVgQA2S4OKhd_2qoVQoQXLApTwR78awwMFEQ7eVSbu5DO52dxisjB9ApHmpDCBip5y2MzyS7TizR38e-qBTnCMWt9RuHcKJySFFa-yPRBqYCgZLQWmEsKXBq-RIJToFsaGhVH2sXGXec0-Qsd9CvSPNFfGUDb_d2FLkZyKYKPra7Wmsvpw6qZJxO_TYprs1TbeWJYTTWT6WWI3xn10XtVml0a0P77ESqAWs-nbl6fS15mE24ZVU6rsuD7Q5AmtFfaddVN-JFP3fJ-6VsiY3KAefmdNULF_AVfMxAelBDSHtNllsMv4Qqs8N4h5bY4cabHibpu_OVA7WzfkNbxQ1dZpccZ9pi--xq9BCU3QAzereqYwmKretykB8twHw8Ryl5UVGocBNSJD65w2K3FJGZ6zbinfb_g1vV39iFxLdUz3JT1obce5ndeMBUeFmhN5XsczKAzTRK9c8aX6sdOd5pw5vUe-98qFRypPvCSF4hVA2ziwH38V9Dtc56UEVSMKISOacRMs8F_m9XtxP4X5KsWICIrK8_EXWfgmvEQnXm5PHV24ROsbnmmtUJWN1-vgzmNmSQ54_66W-fsCdnYAzDlwZeKr7wTZYO82nepNHX-wvTTEPV-QlrTPQFAlguP6nnxRc8MoxyiEvT4fOsDwD4yWFkLMMlKbyB6pQF_0CW_rQbyl0e6EKP2HbIDVKs628MDizjsdX693gplJevjF5g";
+
+  const url = `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token`;
+
+  const params = new URLSearchParams();
+  params.append('client_id', clientId);
+  params.append('grant_type', 'refresh_token');
+  params.append('refresh_token', refresh_token);
+  params.append('client_secret', clientSecret);
+  params.append('scope', scope);
+
+  try {
+    const response = await axios.post(url, params, {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    });
+
+
+    // Si el refresh token cambia, actualízalo
+    if (response.data.refresh_token) {
+      refresh_token = response.data.refresh_token;
+    }
+
+    console.log("Refresh Token:", response.data.refresh_token); 
+    console.log("Access Token:", response.data.access_token);
+    return response.data.access_token;
+
+  } catch (err) {
+    console.error("Error al obtener el token de acceso:", err.message);
+    return null;
+  }
+}
+
+
+async function generateEmbedToken() {
+   
+   
+    const accessToken = await getAccessToken();
+         
+    const groupId = "fad3d819-9f17-4777-a2ad-3cc65decf46b";
+    const reportId = "ee118c4d-2ffd-4bbd-87e2-b959d6ed54d3"; //parametrizable
+    const datasetId = "da48caa5-f2c6-4747-9fc6-c4c6a90ca312"; // parametrizable Opcional, pero recomendable
+    
+    const url = `https://api.powerbi.com/v1.0/myorg/groups/${groupId}/reports/${reportId}/GenerateToken`;
+    //const url = 'https://api.powerbi.com/v1.0/myorg/groups/fad3d819-9f17-4777-a2ad-3cc65decf46b/reports/ee118c4d-2ffd-4bbd-87e2-b959d6ed54d3/GenerateToken'
+              
+  
+    const body = {
+      accessLevel: "View",
+      datasetId: datasetId
+    };
+  
+    const response = await axios.post(url, body, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+  
+    return response.data.token;
+  
+  }
+  
+router.get('/embed-token', async (req, res) => {
+    try {
+        const embedToken = await generateEmbedToken();
+        res.json({ token: embedToken });
+        console.log("Embed Token:", embedToken)
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).send('Error generating embed token');
+    }
+    });
+    
 
 
 module.exports = router;
