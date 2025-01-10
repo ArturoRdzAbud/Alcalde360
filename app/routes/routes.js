@@ -239,7 +239,7 @@ const axios = require('axios');
 async function getAccessToken() {
   const tenantId = "b15d8fa9-690a-4b8a-9b08-df1642c6c557";
   const clientId = "5fad5f20-a0e2-40db-9fbb-a85c09909a44";
-  const clientSecret = ""; //para que funcione en sus ambientes tienen que poner el secreto, 
+  const clientSecret = ".nq8Q~UInu2NPk0qLbE7F1KM1x7Vy93ZXHxg6abB"; //para que funcione en sus ambientes tienen que poner el secreto, 
                            //si no lo tienen me lo piden y se los comparto por whatsapp, 
                            //lo tuvé que quitar porque no me dejaba hacer commit de los cambios en el repositorio
   const scope = "https://analysis.windows.net/powerbi/api/.default";
