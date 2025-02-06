@@ -132,10 +132,7 @@ exports.GuardarFicha = async (body) => {
     const mensajeAlcalde = `Hola Alcalde ${nombreAlcalde}, compartimos información relevante acerca de la reunión que se llevará a cabo el día *${fechaFormateada}* a las *${fichaTecnicaReunion[0].HoraIni}* en *${fichaTecnicaReunion[0].Lugar}* para revisar el asunto: *"${fichaTecnicaReunion[0].Asunto}"* con *${fichaTecnicaReunion[0].Nombre}*.\nPuede comunicarse con el solicitante a este número: *${fichaTecnicaReunion[0].Telefono}*.\nPara ver mas detalles de la reunión, puede entrar al siguiente link: ${link}`;
     await twilio.sendTextMessage(whatsAppAlcalde, mensajeAlcalde);
     
-    //console.log(nombreCiudadano)
-    //console.log(whatsAppCiudadano)
-    //console.log(whatsAppFuncionario)
-    
+        
     var TelefonosParticipantesXML = fichaTecnicaReunion[0].TelefonosParticipantesXML //"<person><id>1234</id><age>30</age><name>John Doe</name></person>";
     var TelefonosResponsablesXML = fichaTecnicaReunion[0].TelefonosResponsablesXML //"<person><id>1234</id><age>30</age><name>John Doe</name></person>";
     
@@ -144,14 +141,7 @@ exports.GuardarFicha = async (body) => {
     const Participantes = parseXmlToParticipants(TelefonosParticipantesXML);
     const Acuerdos = parseXmlToAcuerdos(body.psXmlAcuerdo);
     const Actividades = parseXmlToActividades(body.psXmlActividades);
-    
-    //onsole.log(body.psXmlAcuerdo)
-    //console.log(body.psXmlActividades)
-    //console.log(Responsables)
-    //console.log(Participantes)
-    //console.log(Acuerdos)
-    //console.log(Actividades)
-  
+     
  
     if (Participantes && Acuerdos) {
       EnviarMensajesAParticipantes(Participantes, Acuerdos, body.psTitulo, body.psFecha, body.psTema);       
